@@ -82,7 +82,7 @@ void loop() {
       }
     }
   }
-  setData(0xFF);
+  //setData(0xFF);
 }
 
 
