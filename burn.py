@@ -16,7 +16,8 @@ while True:
     print("              1-dump                       ")
     print("              2-burn                       ")
     print("              3-info                       ")
-    print("                                           ")
+    print("                              2016         ")
+    print("                                  Robson C ")
     print("===========================================")
     option=int(input())
     romsize=1*1024*1024

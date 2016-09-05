@@ -7,7 +7,7 @@ const unsigned long romSize=1024*1024;
 
 
 //The pinout from the eprom is different from the snes pinout 
-char adrPins[20]={22,//eprom A0  snes A0
+int adrPins[20]={22,//eprom A0  snes A0
                   23,//eprom A1  snes A1
                   24,//eprom A2  snes A2
                   25,//eprom A3  snes A3
@@ -82,7 +82,7 @@ void loop() {
       }
     }
   }
-  
+  setData(0xFF);
 }
 
 
@@ -107,18 +107,16 @@ void readMode(){
   digitalWrite(readPin,LOW);
   
 }
-void setAddress(unsigned long Addr){
-    unsigned long data;
-    data=Addr;
+void setAddress(uint32_t Addr){
     for(int i=0;i<8;i++){
-      digitalWrite(adrPins[i],data&(1<<i));
+      digitalWrite(adrPins[i],Addr&(1<<i));
     }
-    data=data>>8;
+    Addr=Addr>>8;
     for(int i=0;i<8;i++){
-      digitalWrite(adrPins[i+8],data&(1<<i));
+      digitalWrite(adrPins[i+8],Addr&(1<<i));
     }
-    data=data>>8;
-    for(int i=0;i<8;i++){
+    Addr=Addr>>8;
+    for(int i=0;i<4;i++){
       digitalWrite(adrPins[i+16],Addr&(1<<i));
     }
 }
@@ -169,6 +167,7 @@ void writeSector(unsigned char sectorH,unsigned char sectorL){
   while(Serial.available()==0);
   CHKreceived=Serial.read();
   programMode();
+  //only program the bytes if the checksum is equal to the one received
   if(CHKreceived==CHK){
     for (int i = 0; i < 128; i++){
       setAddress(address++);
