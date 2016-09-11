@@ -233,6 +233,12 @@ int eraseROM() {
 
   setAddress(0x5555);
   programByte(0x10);
+  readMode();
+  while(~(readByte(0xFF)&(1<<7)));
+  if(readByte(0xFF)==0xFF){
+    Serial.write('Y');
+  }
+  
 }
 
 

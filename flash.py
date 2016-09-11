@@ -83,6 +83,16 @@ while True:
                 response=ord(ser.read(1))
                 print("rsp", response)
         f.close()
-        if(option==3):
-            ser.write(b"\x55")
-            ser.write(bytes("e","ASCII"))
+    if(option==3):
+        ser.flushInput()
+        ser.write(b"\x55")
+        ser.write(bytes("e","ASCII"))
+        response=bytes("N","ASCII")
+        while response!=bytes("Y","ASCII"):
+            print("Waiting for response\n")
+            while ser.inWaiting()==0:
+                time.sleep(0.1)
+                print("waiting for CHK response")
+            response=ser.read(1)
+            print("rsp", response)
+        print("Chip erased\n")
